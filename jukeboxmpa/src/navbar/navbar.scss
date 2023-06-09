@@ -1,0 +1,18 @@
+.navbar{
+    position: absolute;
+    display: flex;
+    background-color: slategray;
+    width: 300px;
+    height: 500px;
+    flex-direction: column;
+    border-radius: 15px;
+    align-items: center;
+    background-image: url("https://www.bensound.com/catalog/view/theme/next/image/bg-home-mobile@2x.jpg");
+    a{
+        color:  white;
+        margin: 10px;
+    }
+    a:hover{
+        color: purple;
+    }
+}
