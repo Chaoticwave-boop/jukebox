@@ -1,0 +1,29 @@
+.mainpage{
+    position: absolute;
+    border-radius: 15px;
+    height: 500px;
+    left: 25%;
+    width: 1000px;
+    background-image: url("../image/background-pattern-15.jpg");
+
+   h1{
+    color: white;
+   }
+   p{
+    color: white;
+   }
+}
+
+.playimage{
+    position: relative;
+    height: 700px;
+    width: 600px;
+    top: 300px;
+}
+.home_page{
+    width: 100%;
+    height: 100vh;
+    background-image: url("../image/background.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
