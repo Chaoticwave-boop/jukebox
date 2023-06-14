@@ -19,9 +19,8 @@
 
         .music_box{
             display: flex;
-            overflow-wrap: break-word;
+            flex-wrap: wrap;
         
-
             .box{
                 margin: 10px;
                 background-color: white;
