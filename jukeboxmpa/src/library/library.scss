@@ -1,0 +1,45 @@
+.library_page{
+    width: 100%;
+    height: 100vh;
+    background-image: url("../image/library.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+
+        
+    .musictext{
+        position: absolute;
+        border-radius: 15px;
+        height: 500px;
+        left: 25%;
+        width: 1000px;
+
+        .inputfield{
+            background-color: white;
+            width: 90%;
+        }
+
+        .music_box{
+            display: flex;
+            flex-wrap: wrap;
+        
+            .box{
+                margin: 10px;
+                background-color: white;
+                background-image: url("../image/glowy.png");
+                overflow-wrap: break-word;
+        
+    
+                h1{
+                    color: white;
+                    font-size: medium;
+                }
+    
+                p{
+                    color: white;
+                }
+            }
+
+        }
+    }
+}
+    
