@@ -67,6 +67,34 @@ Library.init({
     modelName: 'library'
 });
 
+class User extends Model { }
+
+User.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    Name: {
+        type: DataTypes.STRING
+    },
+    Password: {
+        type: DataTypes.STRING
+    },
+    Email: {
+        type: DataTypes.STRING
+    },
+    Playlist: {
+        type: DataTypes.JSON
+    },
+
+}, {
+    freezeTableName: true,
+    timestamps: false,
+    sequelize,
+    modelName: 'users'
+});
+
 
 (async () => {
     console.log('Model synced with the database.');
@@ -135,6 +163,54 @@ app.delete("/api/library/delete/:id", (req, res) => {
             res.status(500).json({ error: 'Error deleting library entry' });
         });
 });
+
+
+app.post('/api/users', (req, res) => {
+    const { Name, Password, Email, Playlist } = req.body;
+
+    User.create({ Name, Password, Email, Playlist })
+        .then((user) => {
+            res.status(201).json({ success: true, id: user.id });
+        })
+        .catch((error) => {
+            console.error('Error creating user:', error);
+            res.status(500).json({ error: 'Error creating user' });
+        });
+});
+
+
+app.post('/api/login', (req, res) => {
+    const { Name, Password } = req.body;
+
+    User.findOne({ where: { Name, Password } })
+        .then((user) => {
+            if (user) {
+                res.status(200).json({ success: true, message: 'Login successful' });
+            } else {
+                res.status(401).json({ error: 'Invalid credentials' });
+            }
+        })
+        .catch((error) => {
+            console.error('Error during login:', error);
+            res.status(500).json({ error: 'Error during login' });
+        });
+});
+
+app.get("/api/get/user", (req, res) => {
+    User.findAll({
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        }
+    })
+        .then((music) => {
+            res.json(music);
+        })
+        .catch((error) => {
+            console.error('Error retrieving data:', error);
+            res.status(500).json({ error: 'Error retrieving data' });
+        });
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);

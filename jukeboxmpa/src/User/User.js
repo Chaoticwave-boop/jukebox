@@ -4,9 +4,6 @@ import './user.scss';
 import { useForm, Controller } from "react-hook-form";
 
 
-
-
-
 const User = () => {
     return (
         <div className="user_page">
@@ -20,26 +17,41 @@ const User = () => {
 }
 
 
-
 const Register = () => {
 
     const { handleSubmit, control, reset } = useForm({
 		defaultValues: {}
 	});
 
+    const RegisterUser = (user) => {
+        console.log(user)
+        fetch('/api/users', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                Name: user.Name ,
+                Password: user.Password,
+                Email: user.Email ,
+                Playlist: {}
+            })
+        })
+    }
+
 
 
     return (
         <div className="login_register">
-            <form onSubmit={handleSubmit(form => console.log(form))} >
+            <form onSubmit={handleSubmit(form => RegisterUser(form))} >
 				<Grid container>
 					<Grid container spacing={3} >
 						<Grid item xs={3}>
-							<h3>Username</h3>
+							<h3>Name</h3>
 						</Grid>
 						<Grid item xs= {3}>
 							<Controller
-								name={"Username"}
+								name={"Name"}
 								control={control}
 								render={({ field }) =>  <TextField  {...field} />} />
 						</Grid>
@@ -81,17 +93,40 @@ const Login = () => {
 		defaultValues: {}
 	});
 
+    const LoginUser = (user) => {
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                Name: user.Name, 
+                Password: user.Password }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    console.log("SUCCESS")
+                } else {
+                    console.log("Failed")
+                }
+            })
+            .catch((error) => {
+                console.error('Error during login:', error);
+            });
+    }
+
     return (
         <div className="login_register">
-             <form onSubmit={handleSubmit(form => console.log(form))} >
+             <form onSubmit={handleSubmit(form => LoginUser(form))} >
 				<Grid container>
 					<Grid container spacing={3} >
 						<Grid item xs={3}>
-							<h3>Username</h3>
+							<h3>Name</h3>
 						</Grid>
 						<Grid item xs= {3}>
 							<Controller
-								name={"Username"}
+								name={"Name"}
 								control={control}
 								render={({ field }) =>  <TextField  {...field} />} />
 						</Grid>
