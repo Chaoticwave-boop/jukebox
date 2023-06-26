@@ -84,10 +84,6 @@ User.init({
     Email: {
         type: DataTypes.STRING
     },
-    Playlist: {
-        type: DataTypes.JSON
-    },
-
 }, {
     freezeTableName: true,
     timestamps: false,
@@ -131,20 +127,6 @@ app.get("/api/library/content", (req, res) => {
      });
 });
 
-
-app.post("/api/library", (req, res) => {
-   const { Name, Artist, Genre } = req.body;
- 
-   Library.create({ Name, Artist, Genre })
-     .then((library) => {
-          res.status(201).json(library);
-      })
-       .catch((error) => {
-        console.error('Error creating library entry:', error);
-           res.status(500).json({ error: 'Error creating library entry' });
-        });
-});
-
 app.delete("/api/library/delete/:id", (req, res) => {
     console.log(req.params)
     const { id } = req.params;
@@ -166,9 +148,9 @@ app.delete("/api/library/delete/:id", (req, res) => {
 
 
 app.post('/api/users', (req, res) => {
-    const { Name, Password, Email, Playlist } = req.body;
+    const { Name, Password, Email } = req.body;
 
-    User.create({ Name, Password, Email, Playlist })
+    User.create({ Name, Password, Email })
         .then((user) => {
             res.status(201).json({ success: true, id: user.id });
         })
@@ -177,6 +159,53 @@ app.post('/api/users', (req, res) => {
             res.status(500).json({ error: 'Error creating user' });
         });
 });
+
+
+class User_playlist extends Model { }
+
+User_playlist.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    User_id: {
+        type: DataTypes.INTEGER
+    },
+    Playelist_Name: {
+        type: DataTypes.STRING
+    }
+}, {
+    timestamps: false,
+    sequelize,
+    modelName: 'user_playlist'
+});
+
+class Song_playlist extends Model { }
+
+Song_playlist.init({
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    User_id: {
+        type: DataTypes.INTEGER
+    },
+    Playelist_Name: {
+        type: DataTypes.STRING
+    }
+}, {
+    timestamps: false,
+    sequelize,
+    modelName: 'song_playlist'
+});
+
+User.hasMany(User_playlist, { foreignKey: 'User_id' , as: "playlists"});
+User_playlist.belongsTo(User, { foreignKey: 'User_id' });
+
+User_playlist.hasMany(Song_playlist, { foreignKey: 'User_playlist_id' });
+Song_playlist.belongsTo(User_playlist, { foreignKey: 'User_playlist_id' });
 
 
 app.post('/api/login', (req, res) => {
@@ -196,6 +225,7 @@ app.post('/api/login', (req, res) => {
         });
 });
 
+
 app.get("/api/get/user", (req, res) => {
     User.findAll({
         attributes: {
@@ -208,6 +238,19 @@ app.get("/api/get/user", (req, res) => {
         .catch((error) => {
             console.error('Error retrieving data:', error);
             res.status(500).json({ error: 'Error retrieving data' });
+        });
+});
+
+app.post("/api/library", (req, res) => {
+    const { Name, Artist, Genre } = req.body; 
+
+    Library.create({ Name, Artist, Genre })
+        .then((library) => {
+            res.status(201).json(library);
+        })
+        .catch((error) => {
+            console.error('Error creating library entry:', error);
+            res.status(500).json({ error: 'Error creating library entry' });
         });
 });
 

@@ -34,11 +34,9 @@ const Register = () => {
                 Name: user.Name ,
                 Password: user.Password,
                 Email: user.Email ,
-                Playlist: {}
             })
         })
     }
-
 
 
     return (
@@ -149,8 +147,6 @@ const Login = () => {
         </div>
     )
 }
-
-
 
 
 
