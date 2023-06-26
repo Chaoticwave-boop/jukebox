@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Navbar from './navbar/Navbar';
 import Music from './jukeboxmusic/music';
+import User from './User/User';
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <Navbar/>
       <BrowserRouter>
         <Routes>
-          <Route  path="/" element={<Home />}/>
+          <Route  path="/" element={<User />}/>
+          <Route  path="/home" element={<Home />}/>
           <Route  path="/Music" element={<Music />}/>
           <Route  path="/Library" element={<Library />}/>
         </Routes>
