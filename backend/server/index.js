@@ -160,6 +160,79 @@ app.post('/api/users', (req, res) => {
         });
 });
 
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'WAKAWAKAWAKAWAKA';
+
+// ...
+
+app.post('/api/login', (req, res) => {
+    const { Name, Password } = req.body;
+
+    User.findOne({ where: { Name, Password } })
+        .then((user) => {
+            if (user) {
+                const token = jwt.sign({ userId: user.id }, JWT_SECRET);
+                res.status(200).json({ success: true, token });
+            } else {
+                res.status(401).json({ error: 'Invalid credentials' });
+            }
+        })
+        .catch((error) => {
+            console.error('Error during login:', error);
+            res.status(500).json({ error: 'Error during login' });
+        });
+});
+
+
+//////
+
+// ...
+
+app.post('/api/add-to-playlist', (req, res) => {
+    const { MusicName } = req.body;
+    const token = req.headers.authorization;
+
+    if (!token) {
+        return res.status(401).json({ error: 'Authorization token required' });
+    }
+
+    try {
+        const decodedToken = jwt.verify(token.split(' ')[1], JWT_SECRET);
+        const userId = decodedToken.userId;
+
+        // Find the user's playlist and add the music
+        User_playlist.findOne({ where: { User_id: userId } })
+            .then((userPlaylist) => {
+                if (!userPlaylist) {
+                    return res.status(404).json({ error: 'User playlist not found' });
+                }
+
+                // Create a new entry in the Song_playlist table
+                Song_playlist.create({
+                    User_id: userId,
+                    User_playlist_id: userPlaylist.id,
+                    MusicName: MusicName,
+                })
+                    .then(() => {
+                        res.status(201).json({ success: true, message: 'Music added to playlist' });
+                    })
+                    .catch((error) => {
+                        console.error('Error adding music to playlist:', error);
+                        res.status(500).json({ error: 'Error adding music to playlist' });
+                    });
+            })
+            .catch((error) => {
+                console.error('Error retrieving user playlist:', error);
+                res.status(500).json({ error: 'Error retrieving user playlist' });
+            });
+    } catch (error) {
+        console.error('Error decoding JWT:', error);
+        res.status(401).json({ error: 'Invalid token' });
+    }
+});
+
+///////
+
 
 class User_playlist extends Model { }
 
@@ -234,6 +307,11 @@ app.get("/api/get/user", (req, res) => {
     })
         .then((music) => {
             res.json(music);
+            if (user) {
+                res.status(200).json({ success: true, message: 'Login successful', user });
+            } else {
+                res.status(401).json({ error: 'Invalid credentials' });
+            }
         })
         .catch((error) => {
             console.error('Error retrieving data:', error);

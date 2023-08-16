@@ -2,7 +2,7 @@ import React from "react";
 import { TextField,Button, Grid } from "@mui/material";
 import './user.scss';
 import { useForm, Controller } from "react-hook-form";
-
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
     return (
@@ -37,7 +37,6 @@ const Register = () => {
             })
         })
     }
-
 
     return (
         <div className="login_register">
@@ -91,6 +90,8 @@ const Login = () => {
 		defaultValues: {}
 	});
 
+	const navigate = useNavigate();
+
     const LoginUser = (user) => {
         fetch('/api/login', {
             method: 'POST',
@@ -105,6 +106,8 @@ const Login = () => {
             .then((data) => {
                 if (data.success) {
                     console.log("SUCCESS")
+					// navigate("/home");
+					GetDataUser()
                 } else {
                     console.log("Failed")
                 }
@@ -113,6 +116,13 @@ const Login = () => {
                 console.error('Error during login:', error);
             });
     }
+
+	const GetDataUser = () => {
+		fetch("/api/get/user").then (
+			response => response.json()
+			
+		  ).then((data) => console.log(data));
+	}
 
     return (
         <div className="login_register">

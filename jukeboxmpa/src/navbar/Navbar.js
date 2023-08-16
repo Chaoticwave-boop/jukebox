@@ -9,6 +9,7 @@ const Navbar = () => {
     return (
         <div className="navbar">
             <a href="/"><LoginIcon/> Login</a>
+            <a href="/LoginTest"><MenuBookIcon/> LoginTest</a>
             <a href="/home"><BungalowIcon/> Home</a>
             <a href="Music"><MusicNoteTwoToneIcon/> Music</a>
             <a href="Library"><MenuBookIcon/> Library</a>
