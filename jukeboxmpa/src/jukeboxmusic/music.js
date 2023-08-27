@@ -7,7 +7,7 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
 
-const Music = () => {
+const Music = ({ token }) => {
     const [ music, setMusic ] = useState();
     const [ library, setLibrary ] = useState();
 
@@ -31,6 +31,7 @@ const Music = () => {
         <div className="music_page">
             <div className="musictext">
                 <h1>Add your music and search</h1>
+                {console.log(token)}
             
                 <p>{!music ? "Loading..." : <MusicBox music={music} library={library}/>}</p>
             </div>

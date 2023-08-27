@@ -7,7 +7,7 @@ import MuiAlert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
 
-const Library = () => {
+const Library = ({token}) => {
     const [ library, setLibrary ] = useState();
 
     useEffect(() => {

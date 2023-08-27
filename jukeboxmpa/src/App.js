@@ -10,12 +10,12 @@ import User from './User/User';
 import Login from './Login/Login';
 
 function App() {
+const [ loggedIn, setLoggedIn ] = useState(false);
+const [ token, setToken ] = useState('');
   
-const [loggedIn, setLoggedIn] = useState(false);
-  
-const handleLogin = (token) => {
-  // Here you can set the token in state or perform other actions
-  // to indicate that the user is logged in.
+const handleLogin = (receivedToken) => {
+  console.log("the token is" + receivedToken)
+  setToken(receivedToken)
   setLoggedIn(true);
 };
 
@@ -24,16 +24,15 @@ const handleLogin = (token) => {
       <Navbar/>
 
       <h1>Jukebox App</h1>
-      {!loggedIn ? <Login onLogin={handleLogin} /> : <p>Welcome! You are logged in.</p>}
+      
  
       <BrowserRouter>
         <Routes>
           {/* <Route  path="/" element={<User />}/> */}
-          <Route  path="/LoginTest" element={<Login />}/>
-
+          <Route  path="/" element={!loggedIn ? <Login onLogin={handleLogin} /> : <p>Welcome! You are logged in.</p>}/>
           <Route  path="/home" element={<Home />}/>
-          <Route  path="/Music" element={<Music />}/>
-          <Route  path="/Library" element={<Library />}/>
+          <Route  path="/Music" element={<Music token={token}/>}/>
+          <Route  path="/Library" element={<Library token={token}/>}/>
         </Routes>
       </BrowserRouter>
 
